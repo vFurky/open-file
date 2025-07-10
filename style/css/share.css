@@ -1,0 +1,121 @@
+body {
+	background-color: #f8f9fa;
+}
+
+.share-header {
+	background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+	padding: 1rem 0;
+	margin-bottom: 2rem;
+}
+
+.navbar-brand {
+	color: white !important;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.file-card {
+	background: white;
+	border-radius: 15px;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+	padding: 2rem;
+	transition: transform 0.3s ease;
+}
+
+.file-card:hover {
+	transform: translateY(-5px);
+}
+
+.file-icon-wrapper {
+	background: #f8f9fa;
+	width: 120px;
+	height: 120px;
+	border-radius: 60px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 1.5rem;
+}
+
+.file-title {
+	font-size: 1.8rem;
+	font-weight: 600;
+	margin-bottom: 1rem;
+	color: #2c3e50;
+}
+
+.file-stats {
+	border-top: 1px solid #eee;
+	border-bottom: 1px solid #eee;
+	padding: 1.5rem 0;
+	margin: 1.5rem 0;
+}
+
+.stat-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.stat-item i {
+	font-size: 1.5rem;
+	color: #0d6efd;
+	margin-bottom: 0.5rem;
+}
+
+.stat-item span {
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.stat-item small {
+	color: #6c757d;
+}
+
+.file-meta {
+	padding: 1rem 0;
+}
+
+.meta-item {
+	display: flex;
+	align-items: center;
+	margin-bottom: 0.8rem;
+}
+
+.meta-item i {
+	width: 25px;
+	color: #0d6efd;
+}
+
+.meta-item span {
+	color: #6c757d;
+	margin-right: 0.5rem;
+}
+
+.download-btn {
+	padding: 0.8rem 2rem;
+	font-size: 1.1rem;
+}
+
+.share-btn {
+	padding: 0.8rem 2rem;
+	font-size: 1.1rem;
+}
+
+.file-security {
+	margin-top: 2rem;
+}
+
+.alert {
+	border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+	.file-stats .row {
+		flex-direction: column;
+	}
+	
+	.stat-item {
+		margin-bottom: 1rem;
+	}
+}

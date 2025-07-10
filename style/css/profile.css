@@ -1,0 +1,87 @@
+.profile-section {
+	padding: 5rem 0;
+}
+
+.profile-container {
+	background-color: #fff;
+	border-radius: 10px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+	padding: 2rem;
+	transition: all 0.3s ease;
+}
+
+.profile-container:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 2rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid #eee;
+}
+
+.profile-avatar {
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 3px solid #4a6bff;
+}
+
+.profile-info {
+	margin-left: 1.5rem;
+}
+
+.profile-tabs .nav-link {
+	color: #666;
+	font-weight: 500;
+	padding: 0.75rem 1.5rem;
+	border-radius: 5px 5px 0 0;
+	margin-right: 0.5rem;
+}
+
+.profile-tabs .nav-link.active {
+	color: #4a6bff;
+	border-bottom: 3px solid #4a6bff;
+	font-weight: 600;
+}
+
+.files-list .file-item {
+	background: #f8f9fa;
+	border-radius: 8px;
+	padding: 1rem;
+	margin-bottom: 1rem;
+	transition: all 0.3s ease;
+	border: 1px solid #eee;
+}
+
+.files-list .file-item:hover {
+	background: #f0f4ff;
+	transform: translateX(5px);
+}
+
+.file-icon {
+	font-size: 2rem;
+	color: #4a6bff;
+}
+
+.activity-item {
+	padding: 1rem 0;
+	border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+	border-bottom: none;
+}
+
+.settings-form label {
+	font-weight: 500;
+	margin-bottom: 0.5rem;
+}
+
+.dropdown-toggle::after {
+	display: none;
+}

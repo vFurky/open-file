@@ -1,0 +1,22 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    Options +FollowSymLinks
+
+    RewriteRule ^share/([a-zA-Z0-9]+)/?$ share.php?token=$1 [L,QSA,NC]
+    RewriteRule ^download\.php$ download.php [L,QSA]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)/$ $1 [L,R=301]
+
+    RewriteCond %{REQUEST_FILENAME} !-d 
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME}.php -f 
+    RewriteRule ^(.*)$ $1.php [L]
+
+    RewriteRule ^logout/?$ logout.php [L,QSA]
+
+    ErrorDocument 404 /open-file/404
+</IfModule>
+
+<IfModule mime_module>
+    AddHandler application/x-httpd-ea-php72 .php .php7 .phtml
+</IfModule>
