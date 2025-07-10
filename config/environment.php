@@ -1,6 +1,6 @@
 <?php
 
-define('DEVELOPMENT_MODE', true); // Geliştirme Modu
+define('DEVELOPMENT_MODE', false); // Geliştirme Modu
 
 if (DEVELOPMENT_MODE) {
 	error_reporting(E_ALL); // Hata Raporlama
