@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/auth-check.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Auth.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Logger.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/auth-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/Auth.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/Logger.php';
 
 try {
 	$auth = Auth::getInstance($db);

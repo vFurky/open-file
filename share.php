@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/assets/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Logger.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/assets/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/Logger.php';
 
 $share_token = isset($_GET['token']) ? preg_replace('/[^a-zA-Z0-9]/', '', $_GET['token']) : '';
 
@@ -11,7 +11,7 @@ if (empty($share_token)) {
 }
 
 if (strpos($_SERVER['REQUEST_URI'], '.php') !== false) {
-	$clean_url = '/open-file/share/' . $share_token;
+	$clean_url = '/share/' . $share_token;
 	header('Location: ' . $clean_url, true, 301);
 	exit();
 }
@@ -36,7 +36,7 @@ try {
 		exit('Dosya artık bulunmuyor veya süresi dolmuş.');
 	}
 
-	$file_path = $_SERVER['DOCUMENT_ROOT'] . '/open-file/' . $file['file_path'];
+	$file_path = $_SERVER['DOCUMENT_ROOT'] . '/' . $file['file_path'];
 	if (!file_exists($file_path)) {
 		Logger::error("DOSYA_BULUNAMADI: " . $file['file_path']);
 		header('HTTP/1.0 404 Not Found');

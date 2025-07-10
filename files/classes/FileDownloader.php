@@ -5,7 +5,7 @@ class FileDownloader {
 
 	public function __construct($db) {
 		$this->db = $db;
-		$this->config = require $_SERVER['DOCUMENT_ROOT'] . '/open-file/config/config.php';
+		$this->config = require $_SERVER['DOCUMENT_ROOT'] . '/config/config.php';
 	}
 
 	public function download($token) {
@@ -38,7 +38,7 @@ class FileDownloader {
 	}
 
 	private function validateAndGetFilePath($file) {
-		$filePath = $_SERVER['DOCUMENT_ROOT'] . '/open-file/' . $file['file_path'];
+		$filePath = $_SERVER['DOCUMENT_ROOT'] . $file['file_path'];
 
 		if (!file_exists($filePath)) {
 			Logger::error("DOSYA_KONUMDA_BULUNAMADI: " . $filePath);

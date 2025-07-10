@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/config.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/login-check.php';
 
-$config = require $_SERVER['DOCUMENT_ROOT'] . '/open-file/config.php';
+$config = require $_SERVER['DOCUMENT_ROOT'] . '/config/config.php';
 
 header('Content-Type: application/json');
 

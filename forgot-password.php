@@ -1,6 +1,6 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/auth-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/auth-check.php';
 
 $err = '';
 

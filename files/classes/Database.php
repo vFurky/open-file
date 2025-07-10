@@ -17,7 +17,7 @@ class Database {
 	}
 
 	private function loadConfig() {
-		$configFile = $_SERVER['DOCUMENT_ROOT'] . '/open-file/config/database.php';
+		$configFile = $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
 
 		if (!file_exists($configFile)) {
 			throw new Exception('Database configuration file not found');
@@ -64,7 +64,7 @@ class Database {
 				$exception->getLine()
 			);
 
-			error_log($logMessage, 3, $_SERVER['DOCUMENT_ROOT'] . '/open-file/logs/database.log');
+			error_log($logMessage, 3, $_SERVER['DOCUMENT_ROOT'] . '/logs/database.log');
 		}
 	}
 

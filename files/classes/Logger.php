@@ -1,13 +1,13 @@
 <?php
 class Logger {
-	private static $logFile = '/open-file/logs/app.log';
+	private static $logFile = '/logs/app.log';
 
 	public static function log($message, $level = 'INFO') {
 		try {
 			$date = date('Y-m-d H:i:s');
 			$logMessage = "[$date][$level] $message" . PHP_EOL;
 
-			$logDir = $_SERVER['DOCUMENT_ROOT'] . '/open-file/logs';
+			$logDir = $_SERVER['DOCUMENT_ROOT'] . '/logs';
 			if (!file_exists($logDir)) {
 				if (!mkdir($logDir, 0755, true)) {
 					throw new Exception("Log dizini oluşturulamadı: $logDir");

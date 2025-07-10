@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/assets/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/files/assets/header.php'; ?>
 <?php $dob_value = (isset($user_dob) && $user_dob !== '0000-00-00') ? htmlspecialchars($user_dob) : ''; ?>
 
 <!DOCTYPE html>

@@ -14,7 +14,7 @@
 
     RewriteRule ^logout/?$ logout.php [L,QSA]
 
-    ErrorDocument 404 /open-file/404
+    ErrorDocument 404 /404
 </IfModule>
 
 <IfModule mime_module>

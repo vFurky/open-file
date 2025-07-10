@@ -1,0 +1,59 @@
+## Önerilen Özellikler
+
+### Dosya ve Depolama ile İlgili Özellikler
+- [ ] Dosya sıkıştırma desteği (.zip, .rar vb.)
+- [ ] Çoklu dosya yükleme desteği (bulk upload)
+- [ ] Dosya önizleme özelliği (resimler, PDF'ler, videolar için)
+- [ ] Dosya versiyonlama sistemi
+- [ ] Dosya şifreleme seçeneği
+- [ ] Yükleme devam ettirme özelliği (kesintiye uğrayan yüklemeleri devam ettirebilme)
+- [ ] Depolama kotası yönetimi ve premium üyelik sistemi
+
+### Paylaşım ve İşbirliği Özellikleri
+- [ ] Paylaşım bağlantıları için son kullanma tarihi ayarlama
+- [ ] Bağlantı bazlı indirme limiti belirleme
+- [ ] Dosya/klasör paylaşımı için farklı izin seviyeleri (okuma/yazma/düzenleme)
+- [ ] Paylaşılan dosyalar için şifre koruma seçeneği
+- [ ] Dosya paylaşım istatistikleri (kaç kez indirildi, kimler görüntüledi vb.)
+- [ ] Paylaşım bağlantıları için QR kod oluşturma
+
+### Kullanıcı Deneyimi
+- [ ] Sürükle-bırak dosya yükleme arayüzü
+- [ ] Dosya arama ve filtreleme sistemi
+- [ ] Etiketleme sistemi
+- [ ] Favori dosyalar/klasörler özelliği
+- [ ] Karanlık/aydınlık tema seçeneği
+- [ ] Mobil uyumlu responsive tasarım
+- [ ] Çoklu dil desteği
+
+### Güvenlik ve Yönetim
+- [ ] İki faktörlü kimlik doğrulama (2FA)
+- [ ] Virüs/zararlı yazılım taraması
+- [ ] Kullanıcı aktivite günlüğü
+- [ ] Otomatik yedekleme sistemi
+- [ ] Spam ve kötüye kullanım önleme sistemleri
+- [ ] GDPR ve veri gizliliği uyumluluğu
+
+### API ve Entegrasyonlar
+- [ ] RESTful API desteği
+- [ ] Webhook entegrasyonları
+- [ ] Popüler bulut depolama servisleriyle entegrasyon (Google Drive, Dropbox vb.)
+- [ ] Sosyal medya paylaşım entegrasyonları
+
+### İleri Seviye Özellikler
+- [ ] Dosya önbelleğe alma ve CDN desteği
+- [ ] Büyük dosyalar için parçalı yükleme
+- [ ] Gerçek zamanlı işbirliği özellikleri
+- [ ] Dosya dönüştürme araçları (format değiştirme)
+- [ ] Otomatik etiketleme ve sınıflandırma (AI destekli)
+- [ ] Dosya analitikleri ve raporlama
+
+## Öncelikli Öneriler
+Yukarıdaki özelliklerden öncelikli olarak şunların eklenmesini öneriyorum:
+1. Çoklu dosya yükleme desteği
+2. Dosya önizleme özelliği
+3. Paylaşım bağlantıları için son kullanma tarihi
+4. Sürükle-bırak arayüzü
+5. İki faktörlü kimlik doğrulama
+
+Bu özellikler kullanıcı deneyimini önemli ölçüde artıracak ve platformunuzu daha güvenli hale getirecektir.

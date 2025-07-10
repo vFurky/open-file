@@ -121,7 +121,7 @@ class FileManager {
 			throw new Exception('Bu dosya türü için önizleme yapılamıyor');
 		}
 
-		$filePath = $_SERVER['DOCUMENT_ROOT'] . '/open-file/' . $file['file_path'];
+		$filePath = $_SERVER['DOCUMENT_ROOT'] . $file['file_path'];
 		if (!file_exists($filePath)) {
 			throw new Exception('Dosya bulunamadı');
 		}

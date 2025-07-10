@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/assets/header.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/files/assets/header.php'; ?>
 
 <!DOCTYPE html>
 <html lang="tr">
