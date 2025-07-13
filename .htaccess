@@ -20,3 +20,7 @@
 <IfModule mime_module>
     AddHandler application/x-httpd-ea-php72 .php .php7 .phtml
 </IfModule>
+
+<FilesMatch \"\\.(php|phtml|php3|php4|php5|phar)$\">
+    Deny from all
+</FilesMatch>

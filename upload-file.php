@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/config.php';
+$config = require $_SERVER['DOCUMENT_ROOT'] . '/open-file/config/config.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
-
-$config = require $_SERVER['DOCUMENT_ROOT'] . '/open-file/config.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/FileSecurity.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Logger.php';
 
 header('Content-Type: application/json');
 
@@ -22,7 +22,7 @@ try {
     $unique_filename = sprintf('%s_%s.%s', $safe_filename, uniqid(), $extension);
 
     $date = new DateTime('now', new DateTimeZone('UTC'));
-    $year_month = $date->format('Y/m');
+    $year_month = $date -> format('Y/m');
     $upload_dir = $config['paths']['upload_dir'] . $year_month;
 
     if (!file_exists($upload_dir) && !mkdir($upload_dir, 0755, true)) {
@@ -36,7 +36,7 @@ try {
 
     $relative_path = 'uploaded-files/' . $year_month . '/' . $unique_filename;
     $share_token = bin2hex(random_bytes(32));
-    $expires_at = $date->modify("+{$config['upload']['expire_days']} days")->format('Y-m-d H:i:s');
+    $expires_at = $date -> modify("+{$config['upload']['expire_days']} days")->format('Y-m-d H:i:s');
     $mime_type = mime_content_type($file_path);
 
     if (!in_array($mime_type, $config['security']['allowed_mime_types'])) {
@@ -44,9 +44,8 @@ try {
         throw new Exception('Dosya türü geçersiz.');
     }
 
-    $uploadFile = $db->prepare("INSERT INTO files (user_id, file_name, file_path, file_size, original_name, mime_type, is_public, share_token, expires_at, created_at) VALUES (:user_id, :file_name, :file_path, :file_size, :original_name, :mime_type, :is_public, :share_token, :expires_at, UTC_TIMESTAMP())");
-
-    $result = $uploadFile->execute([
+    $uploadFile = $db -> prepare("INSERT INTO files (user_id, file_name, file_path, file_size, original_name, mime_type, is_public, share_token, expires_at, created_at) VALUES (:user_id, :file_name, :file_path, :file_size, :original_name, :mime_type, :is_public, :share_token, :expires_at, UTC_TIMESTAMP())");
+    $result = $uploadFile -> execute([
         ':user_id' => $user_id,
         ':file_name' => $file['name'],
         ':file_path' => $relative_path,
