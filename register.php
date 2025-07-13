@@ -27,8 +27,8 @@ try {
 	}
 
 } catch (Exception $e) {
-	Logger::error("KAYIT_FORM_HATASI: " . $e->getMessage() . " - Kullanıcı: vFurky - Tarih: 2025-07-02 23:36:04");
-	$err = 'Hata!<br>' . $e->getMessage();
+	Logger::error("KAYIT_FORM_HATASI: " . $e->getMessage());
+    $err = 'Hata!<br>' . $e->getMessage();
 }
 
 require realpath('.') . '/view-register.php';

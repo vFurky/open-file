@@ -24,6 +24,11 @@ class Auth {
 
             $this->checkBruteForce();
             $user = $this->getUserByEmail($email);
+
+            if (!is_array($user) || !isset($user['password']) || !$this->verifyPassword($password, $user['password'])) {
+                $this->logFailedAttempt($email);
+                throw new Exception('E-Posta adresi veya parola hatalı!');
+            }
             
             if (!$this->verifyPassword($password, $user['password'])) {
                 $this->logFailedAttempt($email);
@@ -266,11 +271,11 @@ class Auth {
     }
 
     private function createUser($userData) {
-        $createUser = $db->prepare("INSERT INTO users (username, email, password, subs, created_at, status, role, remember_token, token_expiry, two_factor_enabled, last_login, login_count) VALUES (:username, :email, :password, 'free', UTC_TIMESTAMP(), 1, 'user', NULL, NULL, 0, NULL, 0)");
+        $createUser = $this->db->prepare("INSERT INTO users (username, email, password, subs, created_at, status, role, remember_token, token_expiry, two_factor_enabled, last_login, login_count) VALUES (:username, :email, :password, 'free', UTC_TIMESTAMP(), 1, 'user', NULL, NULL, 0, NULL, 0)");
 
         $hashedPassword = md5(sha1($userData['password'])); // TODO: Daha güvenli hash yöntemi kullanılmalı
 
-        $createUser -> execute([
+        $createUser->execute([
             ':username' => $userData['username'],
             ':email' => $userData['email'],
             ':password' => $hashedPassword
@@ -280,7 +285,7 @@ class Auth {
     }
 
     private function createUserDetails($userId) {
-        $createUserDetails = $this->db->prepare("INSERT INTO user_details (user_id, created_at) VALUES (:user_id, UTC_TIMESTAMP())");
+        $createUserDetails = $this->db->prepare("INSERT INTO user_details (user_id, created_at) VALUES (:user_id, NOW())");
 
         return $createUserDetails -> execute([
             ':user_id' => $userId
@@ -288,9 +293,9 @@ class Auth {
     }
 
     private function createNotificationPreferences($userId) {
-        $createNotificationPreferences = $this->db->prepare("INSERT INTO notification_preferences (user_id, security, email, telephone, created_at) VALUES (:user_id, 1, 1, 1, UTC_TIMESTAMP())");
+        $createNotificationPreferences = $this->db->prepare("INSERT INTO notification_preferences (user_id, security, email, telephone) VALUES (:user_id, 1, 1, 1)");
 
-        return $createNotificationPreferences -> execute([
+        return $createNotificationPreferences->execute([
             ':user_id' => $userId
         ]);
     }
