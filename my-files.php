@@ -4,18 +4,13 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/FileManager.p
 require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/FolderManager.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Logger.php';
 
-if (!isset($_SESSION['user'])) {
-	header('Location: /open-file/login');
-	exit;
-}
-
-$current_folder_id = isset($_GET['folder']) ? (int)$_GET['folder'] : null;
+$current_folder_id = isset($_GET['folder']) && $_GET['folder'] !== '' ? (int)$_GET['folder'] : null;
 $folderManager = new FolderManager($db, $_SESSION['user']['id']);
 
 try {
-	$folderPath = $current_folder_id ? $folderManager->getFolderPath($current_folder_id) : [];
+	$folderPath = $current_folder_id ? $folderManager -> getFolderPath($current_folder_id) : [];
 	$sortPreference = isset($_GET['sort']) ? $_GET['sort'] : 'name_asc';
-	$contents = $folderManager->getFolderContents($current_folder_id, $sortPreference);
+	$contents = $folderManager -> getFolderContents($current_folder_id, $sortPreference);
 	$folders = $contents['folders'];
 	
 	$getFiles = $db->prepare("SELECT f.*, DATE_FORMAT(f.created_at, '%d.%m.%Y %H:%i') as formatted_date, DATE_FORMAT(f.expires_at, '%d.%m.%Y %H:%i') as formatted_expiry, COALESCE(f.title, f.file_name) as display_name, f.download_count, f.view_count FROM files f WHERE f.user_id = :user_id AND f.folder_id " . ($current_folder_id === null ? "IS NULL" : "= :folder_id") . " AND f.deleted_at IS NULL ORDER BY f.created_at DESC");
@@ -33,34 +28,6 @@ try {
 	$error = 'Dosyalar getirilirken bir hata oluştu.';
 }
 
-function getFileIcon($fileName) {
-	$extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-	$icons = [
-		'pdf' => 'fa-file-pdf',
-		'doc' => 'fa-file-word',
-		'docx' => 'fa-file-word',
-		'xls' => 'fa-file-excel',
-		'xlsx' => 'fa-file-excel',
-		'txt' => 'fa-file-alt',
-		'jpg' => 'fa-file-image',
-		'jpeg' => 'fa-file-image',
-		'png' => 'fa-file-image',
-		'gif' => 'fa-file-image',
-		'zip' => 'fa-file-archive',
-		'rar' => 'fa-file-archive'
-	];
-
-	return isset($icons[$extension]) ? $icons[$extension] : 'fa-file';
-}
-
-function formatFileSize($bytes) {
-	$units = ['B', 'KB', 'MB', 'GB', 'TB'];
-	$bytes = max($bytes, 0);
-	$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-	$pow = min($pow, count($units) - 1);
-	$bytes /= pow(1024, $pow);
-	return round($bytes, 2) . ' ' . $units[$pow];
-}
 ?>
 
 <!DOCTYPE html>

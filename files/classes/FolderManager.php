@@ -10,20 +10,25 @@ class FolderManager {
 	}
 
 	public function createFolder($name, $parent_id = null, $description = null) {
+
 		try {
 			$name = trim($name);
 			if (empty($name)) {
 				throw new Exception('Lütfen bir klasör adı girin!');
 			}
 
-			if ($this->folderExists($name, $parent_id)) {
-				throw new Exception('Bu isimde bir klasör zaten mevcut!');
+			if ($parent_id === 0 || $parent_id === '0' || $parent_id === '' || $parent_id === null) {
+				$parent_id = null;
 			}
 
 			if ($parent_id !== null) {
 				if (!$this->isValidParentFolder($parent_id)) {
 					throw new Exception('Geçersiz üst klasör.');
 				}
+			}
+
+			if ($this->folderExists($name, $parent_id)) {
+				throw new Exception('Bu isimde bir klasör zaten mevcut!');
 			}
 
 			$createFolder = $this->db->prepare("INSERT INTO folders (user_id, parent_id, name, description, created_at) VALUES (:user_id, :parent_id, :name, :description, UTC_TIMESTAMP())");
@@ -263,24 +268,7 @@ class FolderManager {
 	}
 
 	private function isSubfolder($parentId, $childId) {
-		$isSubfolder = $this->db->prepare("
-			WITH RECURSIVE folder_path AS (
-				SELECT id, parent_id 
-				FROM folders 
-				WHERE id = ? AND user_id = ? AND deleted_at IS NULL
-
-				UNION ALL
-
-				SELECT f.id, f.parent_id
-				FROM folders f
-				INNER JOIN folder_path fp ON f.id = fp.parent_id
-				WHERE f.user_id = ? AND f.deleted_at IS NULL
-				)
-			SELECT COUNT(*) 
-			FROM folder_path 
-			WHERE id = ?
-			");
-
+		$isSubfolder = $this->db->prepare("WITH RECURSIVE folder_path AS (SELECT id, parent_id FROM folders WHERE id = ? AND user_id = ? AND deleted_at IS NULL UNION ALL SELECT f.id, f.parent_id FROM folders f INNER JOIN folder_path fp ON f.id = fp.parent_id WHERE f.user_id = ? AND f.deleted_at IS NULL) SELECT COUNT(*) FROM folder_path WHERE id = ?");
 		$isSubfolder -> execute([$childId, $this->user_id, $this->user_id, $parentId]);
 		return $isSubfolder -> fetchColumn() > 0;
 	}

@@ -401,12 +401,12 @@ var APIManager = {
 
 var NotificationManager = {
     showSuccess: function(message) {
-        Swal.fire({
+        return Swal.fire({
             icon: 'success',
             title: 'Başarılı!',
             text: message,
             showConfirmButton: false,
-            timer: 1500
+            timer: 2000
         });
     },
 
@@ -461,7 +461,6 @@ function FileManager(appState) {
 }
 
 FileManager.prototype.moveFile = function(fileId, targetFolderId) {
-    console.log('moveFile çağrıldı:', fileId, targetFolderId);
     return APIManager.makeRequest(CONFIG.API_ENDPOINTS.MOVE_FILE, {
         file_id: fileId,
         folder_id: targetFolderId
@@ -474,7 +473,6 @@ FileManager.prototype.moveFile = function(fileId, targetFolderId) {
 };
 
 FileManager.prototype.moveFolder = function(folderId, targetFolderId) {
-    console.log('moveFolder çağrıldı:', folderId, targetFolderId);
     return APIManager.makeRequest(CONFIG.API_ENDPOINTS.MOVE_FOLDER, {
         folder_id: folderId,
         parent_id: targetFolderId
@@ -596,10 +594,12 @@ UIManager.prototype.initializeFolderOperations = function() {
             APIManager.createFolder(folderName, folderDescription, self.state.currentFolderId)
             .then(function(response) {
                 if (response.status === 'success') {
-                    NotificationManager.showSuccess('Klasör başarıyla oluşturuldu.');
                     createFolderModal.hide();
                     createFolderForm.reset();
-                    window.location.reload();
+
+                    NotificationManager.showSuccess('Klasör başarıyla oluşturuldu.').then(() => {
+                        window.location.reload();
+                    });
                 } else {
                     throw new Error(response.message || 'Bir hata oluştu.');
                 }
@@ -639,11 +639,13 @@ UIManager.prototype.initializeFolderOperations = function() {
 
             NotificationManager.showConfirm({
                 title: 'Emin misin?',
-                text: '"' + folderName + '" klasörünü ve içindeki tüm dosyaları silmek istediğinize emin misin?',
+                text: '"' + folderName + '" klasörünü içindekilerle beraber silmek istediğine emin misin?',
                 callback: function() {
                     self.fileManager.deleteFolder(folderId)
                     .then(function() {
-                        window.location.reload();
+                        NotificationManager.showSuccess('Klasör başarıyla silindi.').then(() => {
+                            window.location.reload();
+                        });
                     })
                     .catch(function(error) {
                         NotificationManager.showError(error.message);
@@ -1137,13 +1139,9 @@ function handleDrop(e) {
         var data = JSON.parse(dataTransfer);
         var targetFolderId = dropZone.dataset.folderId;
 
-        console.log('Taşınacak item:', data);
-        console.log('Hedef klasör:', targetFolderId);
-
         if (data.type === 'file') {
             APIManager.moveFile(data.id, targetFolderId)
             .then(function(response) {
-                console.log('Move file response:', response);
                 if (response.status === 'success') {
                     NotificationManager.showSuccess('Dosya başarıyla taşındı!');
                     setTimeout(() => window.location.reload(), 1000);
@@ -1158,7 +1156,6 @@ function handleDrop(e) {
         } else if (data.type === 'folder') {
             APIManager.moveFolder(data.id, targetFolderId)
             .then(function(response) {
-                console.log('Move folder response:', response);
                 if (response.status === 'success') {
                     NotificationManager.showSuccess('Klasör başarıyla taşındı!');
                     setTimeout(() => window.location.reload(), 1000);
@@ -1167,7 +1164,6 @@ function handleDrop(e) {
                 }
             })
             .catch(function(error) {
-                console.error('Move folder error:', error);
                 NotificationManager.showError('Klasör taşınırken bir hata oluştu: ' + error.message);
             });
         }
