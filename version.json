@@ -1,0 +1,21 @@
+{
+	"version": "0.0.1",
+	"release_date": "2025-07-21",
+	"description": "Bug fixes and improvements",
+	"files": {
+		"updated": [
+		],
+		"new": [
+			"files/classes/AutoUpdater.php",
+			"update-config.php"
+			"update-handler.php",
+			"check-update.php",
+			"version.json"
+		],
+		"deleted": [
+		]
+	},
+	"download_url": "https://github.com/vFurky/open-file/archive/refs/heads/main.zip",
+	"file_checksums": {
+	}
+}
