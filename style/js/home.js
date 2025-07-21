@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 					if (data.status === 'success') {
 						file.previewElement.classList.add('dz-success');
 
-						const shareLink = `${window.location.origin}/open-file/share/${data.file.share_token}`;
+						const shareLink = `${window.location.origin}/share/${data.file.share_token}`;
 						const linkElement = document.createElement('div');
 						linkElement.classList.add('share-link');
 

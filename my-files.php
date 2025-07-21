@@ -1,8 +1,8 @@
 <?php 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/FileManager.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/FolderManager.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Logger.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/login-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/FileManager.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/FolderManager.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/Logger.php';
 
 $current_folder_id = isset($_GET['folder']) && $_GET['folder'] !== '' ? (int)$_GET['folder'] : null;
 $folderManager = new FolderManager($db, $_SESSION['user']['id']);

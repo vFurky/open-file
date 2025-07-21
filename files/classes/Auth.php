@@ -1,4 +1,5 @@
 <?php
+
 class Auth {
     private $db;
     private static $instance = null;

@@ -9,7 +9,7 @@ header("Content-Type: application/json; charset=utf-8");
 ini_set('session.cookie_httponly', 1);
 session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/login-check.php';
 
 if (!isset($_SESSION['user']['id']) || !is_numeric($_SESSION['user']['id'])) {
     http_response_code(403);

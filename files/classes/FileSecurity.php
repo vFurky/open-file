@@ -1,4 +1,5 @@
 <?php
+
 class Security {
 	private static $instance = null;
 	private $config;

@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Logger.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/login-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/Logger.php';
 
 try {
     $userInfo = isset($_SESSION['user']) ? [

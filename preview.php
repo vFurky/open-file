@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/FileManager.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/login-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/FileManager.php';
 
 header('Content-Type: application/json');
 

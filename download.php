@@ -1,8 +1,8 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/FileDownloader.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Logger.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/FileSecurity.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/login-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/FileDownloader.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/Logger.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/FileSecurity.php';
 
 try {
     Logger::info("INDIRME_ISTEGI: " . ($_SESSION['user']['username'] ?? 'Guest'));

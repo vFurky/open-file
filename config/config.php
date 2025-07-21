@@ -11,10 +11,10 @@ return [
         ]
     ],
     'paths' => [
-        'upload_dir' => $_SERVER['DOCUMENT_ROOT'] . '/open-file/uploaded-files/',  // Yükleme Yolu
-        'log_dir' => $_SERVER['DOCUMENT_ROOT'] . '/open-file/logs/',  // Log Yolu
-        'site_url' => 'http://localhost/open-file/', // Site URL
+        'upload_dir' => $_SERVER['DOCUMENT_ROOT'] . '/uploaded-files/',  // Yükleme Yolu
+        'log_dir' => $_SERVER['DOCUMENT_ROOT'] . '/logs/',  // Log Yolu
+        'site_url' => '', // Site URL
         'site_name' => 'OpenFile', // Site Adı
-        'style_path' => $_SERVER['DOCUMENT_ROOT'] . '/open-file/style/' // Stil Yolu
+        'style_path' => $_SERVER['DOCUMENT_ROOT'] . '/style/' // Stil Yolu
     ]
 ];

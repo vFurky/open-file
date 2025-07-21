@@ -1,7 +1,7 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/database.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/all-values.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/database.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/all-values.php';
 
 function getFileIcon($fileName) {
 	$extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));

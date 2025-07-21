@@ -1,8 +1,8 @@
 <?php
 return [
-	'host' => 'localhost', // Veritabanı Sunucusu
-	'database' => 'openfile', // Veritabanı Adı
-	'username' => 'root', // Kullanıcı Adı
+	'host' => '', // Veritabanı Sunucusu
+	'database' => '', // Veritabanı Adı
+	'username' => '', // Kullanıcı Adı
 	'password' => '', // Şifre
 	'options' => [
 		PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Hata Modu

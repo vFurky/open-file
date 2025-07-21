@@ -6,7 +6,7 @@ header("X-Content-Type-Options: nosniff");
 ini_set('session.cookie_httponly', 1);
 session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/login-check.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 	http_response_code(405);

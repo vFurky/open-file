@@ -1,6 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/security/login-check.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/open-file/files/classes/Logger.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/security/login-check.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/Logger.php';
 
 header('Content-Type: application/json');
 
@@ -25,7 +25,7 @@ try {
 		throw new Exception('Dosya bulunamadı.');
 	}
 
-	$file_path = $_SERVER['DOCUMENT_ROOT'] . '/open-file/' . $file['file_path'];
+	$file_path = $_SERVER['DOCUMENT_ROOT'] . '/' . $file['file_path'];
 	if (file_exists($file_path)) {
 		if (!unlink($file_path)) {
 			throw new Exception('Dosya sistemden silinemedi.');

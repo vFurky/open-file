@@ -27,11 +27,11 @@ if (!Object.fromEntries) {
 
 var CONFIG = {
     API_ENDPOINTS: {
-        CREATE_FOLDER: '/open-file/create-folder.php',
-        DELETE_FOLDER: '/open-file/delete-folder.php',
-        RENAME_FOLDER: '/open-file/rename-folder.php',
-        MOVE_FILE: '/open-file/move-file.php',
-        MOVE_FOLDER: '/open-file/move-folder.php'
+        CREATE_FOLDER: '/create-folder.php',
+        DELETE_FOLDER: '/delete-folder.php',
+        RENAME_FOLDER: '/rename-folder.php',
+        MOVE_FILE: '/move-file.php',
+        MOVE_FOLDER: '/move-folder.php'
     },
     PAGINATION: {
         ITEMS_PER_PAGE: 20,
@@ -286,7 +286,7 @@ function generateFileCard(file) {
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li>
-                                <a class="dropdown-item" href="/open-file/download.php?token=${encodeURIComponent(file.share_token)}">
+                                <a class="dropdown-item" href="/download.php?token=${encodeURIComponent(file.share_token)}">
                                     <i class="fas fa-download me-2"></i>İndir
                                 </a>
                             </li>
@@ -776,7 +776,7 @@ UIManager.prototype.handleFileUpload = function(file, container) {
     formData.append('file', file);
 
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', '/open-file/upload-file.php', true);
+    xhr.open('POST', '/upload-file.php', true);
 
     var globalProgress = document.getElementById('globalUploadProgress');
     globalProgress.style.display = 'block';
@@ -848,7 +848,7 @@ UIManager.prototype.initializeDeleteButtons = function() {
                 title: 'Dosyayı Sil',
                 text: `"${fileName}" dosyasını silmek istediğinize emin misiniz?`,
                 callback: function() {
-                    fetch('/open-file/delete-file.php', {
+                    fetch('/delete-file.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -905,28 +905,28 @@ UIManager.prototype.initializeFilePreview = function() {
 
         if (mimeType && mimeType.startsWith('image/')) {
             previewContent.innerHTML = `
-                <img src="/open-file/download.php?token=${shareToken}" class="img-fluid" alt="${fileName}">
+                <img src="/download.php?token=${shareToken}" class="img-fluid" alt="${fileName}">
             `;
         } else if (mimeType === 'application/pdf') {
             previewContent.innerHTML = `
-                <embed src="/open-file/download.php?token=${shareToken}" type="application/pdf" width="100%" height="600px">
+                <embed src="/download.php?token=${shareToken}" type="application/pdf" width="100%" height="600px">
             `;
         } else if (mimeType && mimeType.startsWith('video/')) {
             previewContent.innerHTML = `
                 <video controls class="w-100">
-                    <source src="/open-file/download.php?token=${shareToken}" type="${mimeType}">
+                    <source src="/download.php?token=${shareToken}" type="${mimeType}">
                     Tarayıcınız video oynatmayı desteklemiyor.
                 </video>
             `;
         } else if (mimeType && mimeType.startsWith('audio/')) {
             previewContent.innerHTML = `
                 <audio controls class="w-100">
-                    <source src="/open-file/download.php?token=${shareToken}" type="${mimeType}">
+                    <source src="/download.php?token=${shareToken}" type="${mimeType}">
                     Tarayıcınız ses oynatmayı desteklemiyor.
                 </audio>
             `;
         } else if (mimeType && mimeType.startsWith('text/')) {
-            fetch(`/open-file/download.php?token=${shareToken}`)
+            fetch(`/download.php?token=${shareToken}`)
             .then(response => response.text())
             .then(text => {
                 previewContent.innerHTML = `
@@ -938,7 +938,7 @@ UIManager.prototype.initializeFilePreview = function() {
                 <div class="alert alert-info">
                     Bu dosya türü için önizleme yapılamıyor.
                     <br><br>
-                    <a href="/open-file/download.php?token=${shareToken}" class="btn btn-primary">
+                    <a href="/download.php?token=${shareToken}" class="btn btn-primary">
                         <i class="fas fa-download"></i> İndir
                     </a>
                 </div>
@@ -1185,7 +1185,7 @@ function addFolderPreview() {
 
         folder.addEventListener('mouseenter', async () => {
             try {
-                const response = await fetch(`/open-file/get-folder-preview.php?id=${folderId}`);
+                const response = await fetch(`/get-folder-preview.php?id=${folderId}`);
                 const data = await response.json();
                 const content = `
                     <div class="folder-preview">
@@ -1236,7 +1236,7 @@ function initializeFilePreview() {
             } else if (fileType === 'application/pdf') {
                 showPDFPreview(fileUrl);
             } else {
-                window.location.href = `/open-file/download.php?token=${file.dataset.shareToken}`;
+                window.location.href = `/download.php?token=${file.dataset.shareToken}`;
             }
         });
     });
@@ -1349,7 +1349,7 @@ function handleBulkDelete() {
         callback: function() {
             const deletePromises = items.map(item => {
                 if (item.type === 'file') {
-                    return fetch('/open-file/delete-file.php', {
+                    return fetch('/delete-file.php', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
