@@ -1,5 +1,5 @@
 {
-	"version": "0.0.1",
+	"version": "1.0.1",
 	"release_date": "2025-07-21",
 	"description": "Bug fixes and improvements",
 	"files": {
@@ -7,7 +7,7 @@
 		],
 		"new": [
 			"files/classes/AutoUpdater.php",
-			"update-config.php"
+			"update-config.php",
 			"update-handler.php",
 			"check-update.php",
 			"version.json"
@@ -17,5 +17,10 @@
 	},
 	"download_url": "https://github.com/vFurky/open-file/archive/refs/heads/main.zip",
 	"file_checksums": {
+		"files/classes/AutoUpdater.php": "a1b2c3d4e5f6",
+		"update-config.php": "f6e5d4c3b2a1",
+		"update-handler.php": "1a2b3c4d5e6f",
+		"check-update.php": "6f5e4d3c2b1a",
+		"version.json": "9e8d7c6b5a49"
 	}
 }
