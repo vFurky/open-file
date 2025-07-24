@@ -12,7 +12,7 @@ try {
     if (empty($share_token)) {
         Logger::error("BOS_PAYLASIM_TOKENI_GONDERILDI: " . $_SERVER['REMOTE_ADDR']);
         header('HTTP/1.0 404 Not Found');
-        exit('Dosya bulunamadı.');
+        exit('Bu dosya artık bulunmuyor veya paylaşım süresi dolmuş.');
     }
 
     if (!$db) {
@@ -21,7 +21,7 @@ try {
     }
 
     $downloader = new FileDownloader($db);
-    $downloader->download($share_token);
+    $downloader -> download($share_token);
 
 } catch (Exception $e) {
     Logger::error("[DOWNLOAD.PHP-27]-INDIRME_HATASI: " . $e->getMessage());
