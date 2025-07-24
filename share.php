@@ -161,7 +161,6 @@ try {
 } catch (Exception $e) {
 	Logger::error("SHARE_PAGE_ERROR: " . $e->getMessage());
 	header('HTTP/1.0 500 Internal Server Error');
-<<<<<<< HEAD
 	exit('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
 }
 =======
@@ -186,4 +185,3 @@ function getFileIconClass($extension) {
 
 	return $icons[$extension] ?? 'fas fa-file fa-4x text-secondary';
 }
->>>>>>> origin/master
