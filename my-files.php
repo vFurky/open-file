@@ -21,7 +21,7 @@ try {
 	}
 
 	$getFiles -> execute($params);
-	$files = $getFiles->fetchAll(PDO::FETCH_ASSOC);
+	$files = $getFiles -> fetchAll(PDO::FETCH_ASSOC);
 
 } catch (Exception $e) {
 	Logger::error("[MY-FILES.PHP-17]-DOSYA_CEKME_HATASI: " . $e->getMessage());

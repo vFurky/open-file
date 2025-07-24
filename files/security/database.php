@@ -17,7 +17,7 @@ try {
     $db -> query('SELECT 1');
     
 } catch (Exception $e) {
-    Logger::error("VERITABANI_BAGLANTI_HATASI: " . $e->getMessage());
+    Logger::error("[DATABASE.PHP-20]-VERITABANI_BAGLANTI_HATASI: " . $e->getMessage());
     
     if (defined('DEVELOPMENT_MODE') && DEVELOPMENT_MODE === true) {
         die("Database Error: " . $e->getMessage());

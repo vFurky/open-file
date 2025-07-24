@@ -31,3 +31,22 @@ function formatFileSize($bytes) {
 	$bytes /= pow(1024, $pow);
 	return round($bytes, 2) . ' ' . $units[$pow];
 }
+
+function getFileIconClass($extension) {
+	$icons = [
+		'pdf' => 'fas fa-file-pdf fa-4x text-danger',
+		'doc' => 'fas fa-file-word fa-4x text-primary',
+		'docx' => 'fas fa-file-word fa-4x text-primary',
+		'xls' => 'fas fa-file-excel fa-4x text-success',
+		'xlsx' => 'fas fa-file-excel fa-4x text-success',
+		'txt' => 'fas fa-file-alt fa-4x text-secondary',
+		'jpg' => 'fas fa-file-image fa-4x text-info',
+		'jpeg' => 'fas fa-file-image fa-4x text-info',
+		'png' => 'fas fa-file-image fa-4x text-info',
+		'gif' => 'fas fa-file-image fa-4x text-info',
+		'zip' => 'fas fa-file-archive fa-4x text-warning',
+		'rar' => 'fas fa-file-archive fa-4x text-warning'
+	];
+
+	return $icons[$extension] ?? 'fas fa-file fa-4x text-secondary';
+}

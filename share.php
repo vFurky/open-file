@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/files/classes/Logger.php';
 $share_token = isset($_GET['token']) ? preg_replace('/[^a-zA-Z0-9]/', '', $_GET['token']) : '';
 
 if (empty($share_token)) {
-	Logger::error("EMPTY_SHARE_TOKEN_REQUEST: " . $_SERVER['REMOTE_ADDR']);
+	Logger::error("BOS_PAYLASIM_TOKENI_GONDERILDI: " . $_SERVER['REMOTE_ADDR']);
 	header('HTTP/1.0 404 Not Found');
 	exit('Dosya bulunamadı.');
 }
@@ -21,26 +21,33 @@ try {
 		throw new Exception("Veritabanı bağlantısı kurulamadı");
 	}
 
-	$fetchFileInfos = $db->prepare("SELECT f.*, u.username, u.email, COALESCE(f.download_count, 0) as download_count, COALESCE(f.view_count, 0) as view_count FROM files f JOIN users u ON f.user_id = u.id WHERE f.share_token = ? AND f.deleted_at IS NULL AND (f.expires_at > UTC_TIMESTAMP() OR f.expires_at IS NULL)");
+	$fetchFileInfos = $db -> prepare("SELECT f.*, u.username, u.email, COALESCE(f.download_count, 0) as download_count, COALESCE(f.view_count, 0) as view_count FROM files f JOIN users u ON f.user_id = u.id WHERE f.share_token = ? AND f.deleted_at IS NULL AND (f.expires_at > UTC_TIMESTAMP() OR f.expires_at IS NULL)");
 
 	if (!$fetchFileInfos) {
-		throw new Exception('SQL hazırlama hatası');
+		Logger::error("[SHARE.PHP-27]-SQL_HAZIRLAMA_HATASI: " . $db -> errorInfo());
+		throw new Exception('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
 	}
 
 	$fetchFileInfos -> execute([$share_token]);
+
+	if (!$fetchFileInfos) {
+		Logger::error("[SHARE.PHP-34]-SORGU_HATASI: " . $fetchFileInfos->errorInfo());
+		throw new Exception('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
+	}
+
 	$file = $fetchFileInfos -> fetch(PDO::FETCH_ASSOC);
 
 	if (!$file) {
-		Logger::error("GECERSIZ_PAYLASIM_tokenı: " . $share_token);
+		Logger::error("[SHARE.PHP-41]-GECERSIZ_PAYLASIM_TOKENI: " . $share_token);
 		header('HTTP/1.0 404 Not Found');
-		exit('Dosya artık bulunmuyor veya süresi dolmuş.');
+		exit('Bu dosya artık bulunmuyor veya paylaşım süresi dolmuş.');
 	}
 
 	$file_path = $_SERVER['DOCUMENT_ROOT'] . '/' . $file['file_path'];
 	if (!file_exists($file_path)) {
 		Logger::error("DOSYA_BULUNAMADI: " . $file['file_path']);
 		header('HTTP/1.0 404 Not Found');
-		exit('Dosya artık bulunmuyor veya süresi dolmuş.');
+		exit('Bu dosya artık bulunmuyor veya paylaşım süresi dolmuş.');
 	}
 
 	$updateViews = $db -> prepare("UPDATE files SET view_count = view_count + 1, last_accessed = UTC_TIMESTAMP() WHERE id = ?");
@@ -107,7 +114,7 @@ try {
 									<div class="stat-item">
 										<i class="fas fa-weight-hanging"></i>
 										<span><?= $file_info['size'] ?></span>
-										<small>Boyut</small>
+										<small>Dosya Boyutu</small>
 									</div>
 								</div>
 							</div>
@@ -121,12 +128,12 @@ try {
 							</div>
 							<div class="meta-item">
 								<i class="fas fa-calendar"></i>
-								<span>Yükleme Tarihi:</span>
+								<span>Yüklenme Tarihi:</span>
 								<strong><?= $file_info['upload_date'] ?></strong>
 							</div>
 							<div class="meta-item">
 								<i class="fas fa-clock"></i>
-								<span>Son Geçerlilik:</span>
+								<span>Son Geçerlilik Tarihi:</span>
 								<strong><?= $file_info['expires_at'] ?></strong>
 							</div>
 						</div>
@@ -135,77 +142,24 @@ try {
 							<a href="../download?token=<?= urlencode($share_token) ?>" class="btn btn-primary btn-lg download-btn">
 								<i class="fas fa-download me-2"></i>İndir
 							</a>
-							<button class="btn btn-outline-primary btn-lg share-btn ms-2" 
-							onclick="copyShareLink('<?= $site_url ?>share/<?= $share_token ?>')">
-							<i class="fas fa-share-alt me-2"></i>Paylaş
-						</button>
-					</div>
 
-					<div class="file-security mt-4">
-						<div class="alert alert-info">
-							<i class="fas fa-shield-alt me-2"></i>
-							Bu dosya OpenFile tarafından güvenle korunmaktadır.
+							<button class="btn btn-outline-primary btn-lg share-btn ms-2" onclick="copyShareLink('<?= $site_url ?>share/<?= $share_token ?>')">
+								<i class="fas fa-share-alt me-2"></i>Paylaş
+							</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-	<script>
-		function copyShareLink(link) {
-			navigator.clipboard.writeText(link).then(() => {
-				Swal.fire({
-					title: 'Başarılı!',
-					text: 'Paylaşım linki panoya kopyalandı.',
-					icon: 'success',
-					timer: 2000,
-					showConfirmButton: false
-				});
-			}).catch(() => {
-				Swal.fire({
-					title: 'Hata!',
-					text: 'Link kopyalanamadı.',
-					icon: 'error'
-				});
-			});
-		}
-	</script>
-</body>
-</html>
-<?php
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script type="text/javascript" src="<?= $site_url; ?>style/js/share.js"></script>
+	</body>
+	</html>
+	<?php
 } catch (Exception $e) {
 	Logger::error("SHARE_PAGE_ERROR: " . $e->getMessage());
 	header('HTTP/1.0 500 Internal Server Error');
-	exit('Bir hata oluştu: ' . $e->getMessage());
-}
-
-function formatFileSize($bytes) {
-	$units = ['B', 'KB', 'MB', 'GB', 'TB'];
-	$bytes = max($bytes, 0);
-	$pow = floor(($bytes ? log($bytes) : 0) / log(1024));
-	$pow = min($pow, count($units) - 1);
-	$bytes /= pow(1024, $pow);
-	return round($bytes, 2) . ' ' . $units[$pow];
-}
-
-function getFileIconClass($extension) {
-	$icons = [
-		'pdf' => 'fas fa-file-pdf fa-4x text-danger',
-		'doc' => 'fas fa-file-word fa-4x text-primary',
-		'docx' => 'fas fa-file-word fa-4x text-primary',
-		'xls' => 'fas fa-file-excel fa-4x text-success',
-		'xlsx' => 'fas fa-file-excel fa-4x text-success',
-		'txt' => 'fas fa-file-alt fa-4x text-secondary',
-		'jpg' => 'fas fa-file-image fa-4x text-info',
-		'jpeg' => 'fas fa-file-image fa-4x text-info',
-		'png' => 'fas fa-file-image fa-4x text-info',
-		'gif' => 'fas fa-file-image fa-4x text-info',
-		'zip' => 'fas fa-file-archive fa-4x text-warning',
-		'rar' => 'fas fa-file-archive fa-4x text-warning'
-	];
-
-	return $icons[$extension] ?? 'fas fa-file fa-4x text-secondary';
+	exit('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
 }

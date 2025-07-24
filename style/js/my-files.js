@@ -890,8 +890,8 @@ UIManager.prototype.initializeFilePreview = function() {
         if (!fileCard) return;
 
         var fileId = fileCard.dataset.fileId;
-        var fileName = fileCard.dataset.fileName;
-        var mimeType = fileCard.dataset.mimeType;
+        var fileName = btn.dataset.fileName;
+        var mimeType = btn.dataset.mimeType;
 
         var downloadBtn = fileCard.querySelector('.btn-primary');
         var downloadHref = downloadBtn ? downloadBtn.getAttribute('href') : '';
@@ -909,9 +909,14 @@ UIManager.prototype.initializeFilePreview = function() {
             `;
         } else if (mimeType === 'application/pdf') {
             previewContent.innerHTML = `
-                <embed src="/download.php?token=${shareToken}" type="application/pdf" width="100%" height="600px">
+                <div class="alert alert-info">
+                    Bu dosya bir PDF dosyası. Görüntülemek için lütfen butona tıklayın.<br><br><a href="/download.php?token=${shareToken}" target="_blank" class="btn btn-primary mt-2">Görüntüle</a>
+                </div>
             `;
-        } else if (mimeType && mimeType.startsWith('video/')) {
+            previewModal.show();
+            return;
+        }
+        else if (mimeType && mimeType.startsWith('video/')) {
             previewContent.innerHTML = `
                 <video controls class="w-100">
                     <source src="/download.php?token=${shareToken}" type="${mimeType}">
@@ -1334,10 +1339,14 @@ function handleBulkDelete() {
     const selectedItems = document.querySelectorAll('.item-select:checked');
     const items = Array.from(selectedItems).map(checkbox => {
         const card = checkbox.closest('.file-card, .folder-card');
+        const isFile = card.dataset.itemType === 'file';
+        const id = isFile ? card.dataset.fileId : card.dataset.folderId;
+        const nameEl = isFile ? card.querySelector('.file-name') : card.querySelector('.folder-name a');
+
         return {
-            id: card.dataset.fileId || card.dataset.folderId,
-            type: card.dataset.itemType,
-            name: card.dataset.fileName || card.querySelector('.folder-name').textContent.trim()
+            id,
+            type: isFile ? 'file' : 'folder',
+            name: nameEl?.textContent.trim() ?? 'Bilinmeyen'
         };
     });
 
@@ -1346,17 +1355,13 @@ function handleBulkDelete() {
     NotificationManager.showConfirm({
         title: 'Toplu Silme',
         text: `${items.length} öğeyi silmek istediğinize emin misiniz?`,
-        callback: function() {
+        callback: function () {
             const deletePromises = items.map(item => {
                 if (item.type === 'file') {
                     return fetch('/delete-file.php', {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            file_id: item.id
-                        })
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ file_id: item.id })
                     });
                 } else {
                     return APIManager.deleteFolder(item.id);
@@ -1369,8 +1374,8 @@ function handleBulkDelete() {
                 setTimeout(() => window.location.reload(), 1000);
             })
             .catch(error => {
-                NotificationManager.showError('Bazı öğeler silinirken hata oluştu');
-                console.error('Bulk delete error:', error);
+                NotificationManager.showError('Bazı öğeler silinirken hata oluştu.');
+                console.error('Bulk delete error: ', error);
             });
         }
     });

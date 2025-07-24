@@ -1,5 +1,4 @@
 <?php
-
 class FileDownloader {
 	private $db;
 	private $config;
@@ -76,7 +75,13 @@ class FileDownloader {
 		finfo_close($finfo);
 
 		header('Content-Type: ' . $mimeType);
-		header('Content-Disposition: attachment; filename="' . rawurlencode($file['file_name']) . '"');
+
+		if ($mimeType === 'application/pdf') {
+			header('Content-Disposition: inline; filename="' . rawurlencode($file['file_name']) . '"');
+		} else {
+			header('Content-Disposition: attachment; filename="' . rawurlencode($file['file_name']) . '"');
+		}
+
 		header('Content-Length: ' . $fileSize);
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Pragma: no-cache');
@@ -90,8 +95,8 @@ class FileDownloader {
 			fclose($fp);
 			Logger::info("BASARILI_DOSYA_AKISI: " . $file['file_name']);
 		} else {
-			Logger::error("DOSYA_ACMA_HATASI: " . $filePath);
-			throw new Exception('Dosya açılamadı');
+			Logger::error("[FILEDOWNLOADER.PHP-98]-DOSYA_ACMA_HATASI: " . $filePath);
+			throw new Exception('Dosya açılırken bir hata meydana geldi, lütfen daha sonra tekrar deneyin.');
 		}
 
 		exit;
