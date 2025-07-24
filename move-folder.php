@@ -16,17 +16,19 @@ try {
     }
 
     $folderManager = new FolderManager($db, $_SESSION['user']['id']);
-    $folderManager->moveFolder($input['folder_id'], $input['parent_id'] ?? null);
+    $folderManager -> moveFolder($input['folder_id'], $input['parent_id'] ?? null);
 
+    Logger::info("KLASOR_TASINDI: " . $input['folder_id'] . " - " . $input['parent_id'] ?? null)
     echo json_encode([
         'status' => 'success',
-        'message' => 'Klasör başarıyla taşındı.'
+        'message' => 'Klasör başarıyla taşındı!'
     ]);
 
 } catch (Exception $e) {
     http_response_code(400);
+    Logger::error("[MOVE-FOLDER.PHP-38]-KLASOR_TASIMA_HATASI: " . $e -> getMessage());
     echo json_encode([
         'status' => 'error',
-        'message' => $e->getMessage()
+        'message' => 'Klasör taşınırken bir hata oluştu: ' . $e -> getMessage()
     ]);
 }

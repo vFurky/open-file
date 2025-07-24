@@ -13,7 +13,7 @@ try {
     $input = json_decode(file_get_contents('php://input'), true);
     
     if (!isset($input['name'])) {
-        throw new Exception('Klasör adı gereklidir.');
+        throw new Exception('Lütfen bir klasör ismi girin.');
     }
 
     $folderManager = new FolderManager($db, $_SESSION['user']['id']);
@@ -23,6 +23,7 @@ try {
         $input['description'] ?? null
     );
 
+    Logger::info("KLASOR_OLUSTURULDU: " . $folderId);
     echo json_encode([
         'status' => 'success',
         'message' => 'Klasör başarıyla oluşturuldu.',
@@ -30,11 +31,10 @@ try {
     ]);
 
 } catch (Exception $e) {
-    Logger::error("KLASOR_OLUSTURMA_HATASI: " . $e->getMessage());
-    
     http_response_code(400);
+    Logger::error("KLASOR_OLUSTURMA_HATASI: " . $e -> getMessage());
     echo json_encode([
         'status' => 'error',
-        'message' => $e->getMessage()
+        'message' => 'Klasör oluştururken bir hata meydana geldi: ' . $e -> getMessage()
     ]);
 }

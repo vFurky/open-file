@@ -14,7 +14,7 @@ try {
     $err = '';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        if (!isset($_POST['csrf_token']) || !$auth->validateCSRFToken($_POST['csrf_token'])) {
+        if (!isset($_POST['csrf_token']) || !$auth -> validateCSRFToken($_POST['csrf_token'])) {
             throw new Exception('Güvenlik doğrulaması başarısız!');
         }
 
@@ -29,7 +29,7 @@ try {
     }
 
 } catch (Exception $e) {
-    Logger::error("LOGIN_FORM_HATASI: " . $e->getMessage());
+    Logger::error("[LOGIN.PHP-32]-LOGIN_FORM_HATASI: " . $e->getMessage());
     $err = 'Hata!<br>' . $e->getMessage();
 }
 

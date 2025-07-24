@@ -460,7 +460,7 @@ class Security {
 
 			if (strpos($mime_type, 'image/') === 0) {
 				$exifCleaned = Security::cleanImageExifData($file_path);
-				Logger::info("EXIF_TEMIZLEME", ['dosya' => $file['name'], 'temizlendi' => $exifCleaned]);
+				Logger::info("EXIF_TEMIZLEME: ", ['dosya' => $file['name'], ' Temizlendi: ' => $exifCleaned]);
 			}
 
 			return true;

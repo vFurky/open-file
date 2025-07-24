@@ -97,13 +97,14 @@ try {
 	session_unset();
 	session_destroy();
 
+	Logger::info("PAROLA_DEGISTIRILDI: " . $user_id);
 	echo json_encode([
 		'status' => 'success',
-		'message' => 'Parolanız başarıyla güncellendi! Lütfen tekrar giriş yapın.'
+		'message' => 'Parolanız başarıyla güncellendi, güvenlik gereği otomatik olarak çıkış yaptınız. Lütfen tekrar giriş yapın.'
 	]);
 
 } catch (PDOException $e) {
-	error_log('Password update error: ' . $e -> getMessage());
+	Logger::error('[CHANGE-PASSWORD.PHP-107]-PAROLA_GUNCELLEME_HATASI: ' . $e -> getMessage());
 	echo json_encode([
 		'status' => 'error',
 		'message' => 'Bir veritabanı hatası oluştu, lütfen daha sonra tekrar deneyin.'

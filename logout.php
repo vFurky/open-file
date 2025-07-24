@@ -21,9 +21,9 @@ try {
                 }
 
                 setcookie('remember_token', '', time() - 3600, '/', '', true, true);
-                Logger::info("Remember token cleared for user: " . $userInfo['username']);
+                Logger::info("HATIRLA_TOKENI_TEMIZLENDI: " . $userInfo['username']);
             } catch (Exception $e) {
-                Logger::error("Token clear error for user " . $userInfo['username'] . ": " . $e->getMessage());
+                Logger::error("[LOGOUT.PHP-26]-TOKEN_TEMIZLEME_HATASI (" . $userInfo['username'] . "): " . $e->getMessage());
             }
         }
 

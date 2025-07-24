@@ -21,7 +21,7 @@ class Logger {
 				throw new Exception("Log dosyasına yazılamadı: $logPath");
 			}
 		} catch (Exception $e) {
-			error_log("LOGGER_HATASI: " . $e->getMessage());
+			error_log("LOGGER_HATASI: " . $e -> getMessage());
 		}
 	}
 

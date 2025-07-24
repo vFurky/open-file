@@ -14,7 +14,7 @@ try {
 	}
 
 	$fileManager = new FileManager($db);
-	$preview = $fileManager->getFilePreview($_GET['file_id'], $_SESSION['user']['id']);
+	$preview = $fileManager -> getFilePreview($_GET['file_id'], $_SESSION['user']['id']);
 
 	echo json_encode([
 		'success' => true,

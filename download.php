@@ -21,10 +21,10 @@ try {
     }
 
     $downloader = new FileDownloader($db);
-    $downloader->download($share_token);
+    $downloader -> download($share_token);
 
 } catch (Exception $e) {
-    Logger::error("[DOWNLOAD.PHP-27]-INDIRME_HATASI: " . $e->getMessage());
     header('HTTP/1.0 500 Internal Server Error');
+    Logger::error("[DOWNLOAD.PHP-28]-INDIRME_HATASI: " . $e -> getMessage());
     exit('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
 }

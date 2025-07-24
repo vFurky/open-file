@@ -129,7 +129,7 @@ class FolderManager {
 		$folderExists = $this->db->prepare("SELECT COUNT(*) FROM folders WHERE user_id = ? AND name = ? AND deleted_at IS NULL AND " . 
 			($parent_id === null ? "parent_id IS NULL" : "parent_id = ?"));
 		$folderExists->execute($params);
-		return $folderExists->fetchColumn() > 0;
+		return $folderExists -> fetchColumn() > 0;
 	}
 
 	private function isValidParentFolder($parent_id) {
@@ -142,8 +142,8 @@ class FolderManager {
 		try {
 			$fileCheck = $this->db->prepare("SELECT id FROM files WHERE id = ? AND user_id = ? AND deleted_at IS NULL");
 			$fileCheck -> execute([$file_id, $this->user_id]);
-			if (!$fileCheck->fetch()) {
-				throw new Exception('Dosya bulunamadı.');
+			if (!$fileCheck -> fetch()) {
+				throw new Exception('Dosya artık bulunmuyor veya süresi dolmuş.');
 			}
 
 			if ($folder_id !== null) {
@@ -172,7 +172,7 @@ class FolderManager {
 			$parent_id = $renameFolder -> fetchColumn();
 
 			if ($this->folderExists($newName, $parent_id)) {
-				throw new Exception('Bu isimde bir klasör zaten mevcut!');
+				throw new Exception('Zaten bu isimde bir klasör mevcut!');
 			}
 
 			$renameFolder2 = $this->db->prepare("UPDATE folders SET name = ?, updated_at = UTC_TIMESTAMP() WHERE id = ? AND user_id = ? AND deleted_at IS NULL");
@@ -268,7 +268,22 @@ class FolderManager {
 	}
 
 	private function isSubfolder($parentId, $childId) {
-		$isSubfolder = $this->db->prepare("WITH RECURSIVE folder_path AS (SELECT id, parent_id FROM folders WHERE id = ? AND user_id = ? AND deleted_at IS NULL UNION ALL SELECT f.id, f.parent_id FROM folders f INNER JOIN folder_path fp ON f.id = fp.parent_id WHERE f.user_id = ? AND f.deleted_at IS NULL) SELECT COUNT(*) FROM folder_path WHERE id = ?");
+		$isSubfolder = $this->db->prepare("
+			WITH RECURSIVE folder_path AS (SELECT id, parent_id FROM folders WHERE id = ? 
+				AND user_id = ? 
+				AND deleted_at 
+				IS NULL UNION ALL SELECT 
+				f.id, f.parent_id 
+				FROM folders f 
+				INNER JOIN folder_path fp 
+				ON f.id = fp.parent_id 
+				WHERE f.user_id = ? 
+				AND f.deleted_at 
+				IS NULL) 
+			SELECT COUNT(*) 
+			FROM folder_path 
+			WHERE id = ?"
+		);
 		$isSubfolder -> execute([$childId, $this->user_id, $this->user_id, $parentId]);
 		return $isSubfolder -> fetchColumn() > 0;
 	}

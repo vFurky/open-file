@@ -52,7 +52,7 @@ class Auth {
             return true;
 
         } catch (Exception $e) {
-            Logger::error("LOGIN_HATASI: " . $e->getMessage() . " - IP: " . $this->getClientIp());
+            Logger::error("[AUTH.PHP-55]-GIRIS_HATASI: " . $e->getMessage() . " - IP: " . $this->getClientIp());
             throw $e;
         }
     }
@@ -83,7 +83,7 @@ class Auth {
         $attempts = $checkBruteForce -> fetch(PDO::FETCH_ASSOC);
 
         if ($attempts['attempt_count'] >= $this->maxLoginAttempts) {
-            Logger::error("BRUTE_FORCE_TESPIT: IP: {$ip} - Tarih: " . date('Y-m-d H:i:s'));
+            Logger::error("BRUTE_FORCE_TESPIT_EDILDI - IP: {$ip} - Tarih: " . date('Y-m-d H:i:s'));
             throw new Exception("Çok fazla başarısız deneme. Lütfen {$this->lockoutTime} dakika sonra tekrar deneyin.");
         }
     }
@@ -196,7 +196,7 @@ class Auth {
                 $this->db->rollBack();
             }
 
-            Logger::error("KAYIT_HATASI: " . $e->getMessage() . " - IP: " . $this->getClientIp());
+            Logger::error("[AUTH.PHP-199]-KAYIT_HATASI: " . $e->getMessage() . " - IP: " . $this->getClientIp());
             throw $e;
         }
     }
@@ -243,7 +243,7 @@ class Auth {
         }
 
         if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-            throw new Exception('Geçersiz e-posta formatı.');
+            throw new Exception('Geçersiz E-Posta formatı.');
         }
 
         $this->validatePasswordStrength($data['password']);
@@ -276,7 +276,7 @@ class Auth {
 
         $hashedPassword = md5(sha1($userData['password'])); // TODO: Daha güvenli hash yöntemi kullanılmalı
 
-        $createUser->execute([
+        $createUser -> execute([
             ':username' => $userData['username'],
             ':email' => $userData['email'],
             ':password' => $hashedPassword

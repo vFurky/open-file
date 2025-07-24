@@ -21,7 +21,8 @@ class Database {
 		$configFile = $_SERVER['DOCUMENT_ROOT'] . '/config/database.php';
 
 		if (!file_exists($configFile)) {
-			throw new Exception('Database configuration file not found');
+			Logger::error("DATABASE_CONFIG_DOSYASI_BULUNAMADI");
+			throw new Exception('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
 		}
 
 		$this->config = require $configFile;
@@ -58,11 +59,11 @@ class Database {
 	private function logError($exception) {
 		if (isset($this->config['log_errors']) && $this->config['log_errors']) {
 			$logMessage = sprintf(
-				"[%s] Database Error: %s in %s on line %d\n",
+				"[%s] Database Error: %s in %s on line %d\n", 
 				date('Y-m-d H:i:s'),
-				$exception->getMessage(),
-				$exception->getFile(),
-				$exception->getLine()
+				$exception -> getMessage(),
+				$exception -> getFile(),
+				$exception -> getLine()
 			);
 
 			error_log($logMessage, 3, $_SERVER['DOCUMENT_ROOT'] . '/logs/database.log');

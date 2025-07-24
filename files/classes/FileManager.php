@@ -18,15 +18,15 @@ class FileManager {
 			$this->validateFile($file);
 
 			if (!$this->security->isAllowedMimeType($file['tmp_name'])) {
-				throw new Exception('Dosya türü güvenlik kontrolünden geçmedi');
+				throw new Exception('Dosya türü güvenlik kontrolünden geçmedi.');
 			}
 
 			if (!$this->security->validateFileContent($file['tmp_name'])) {
-				throw new Exception('Dosya içeriği güvenlik kontrolünden geçmedi');
+				throw new Exception('Dosya içeriği güvenlik kontrolünden geçmedi.');
 			}
 
 			if (!$this->security->scanForMalware($file['tmp_name'])) {
-				throw new Exception('Dosya güvenlik taramasından geçmedi');
+				throw new Exception('Dosya güvenlik taramasından geçmedi.');
 			}
 
 			$filePath = $this->createFilePath($file);
@@ -72,12 +72,13 @@ class FileManager {
 		$unique_filename = sprintf('%s_%s.%s', $safe_filename, uniqid(), $extension);
 
 		$date = new DateTime('now', new DateTimeZone('UTC'));
-		$year_month = $date->format('Y/m');
+		$year_month = $date -> format('Y/m');
 		$upload_dir = $this->config['paths']['upload_dir'] . $year_month;
 
 		if (!file_exists($upload_dir)) {
 			if (!mkdir($upload_dir, 0755, true)) {
-				throw new Exception('Yükleme dizini oluşturulamadı');
+				Logger::error("[FILEMANAGER.PHP-80]-DIZIN_OLUSTURULAMADI: " $upload_dir);
+				throw new Exception('Dosya yükleme dizini oluşturulurken bir hata oluştu, lütfen daha sonra tekrar deneyin.');
 			}
 		}
 
@@ -85,7 +86,17 @@ class FileManager {
 	}
 
 	public function getFileStatistics($userId) {
-		$stats = $this->db->prepare("SELECT COUNT(*) as total_files, SUM(file_size) as total_size, COUNT(CASE WHEN is_public = 1 THEN 1 END) as public_files, COUNT(CASE WHEN DATE(created_at) = CURDATE() THEN 1 END) as today_uploads, COUNT(CASE WHEN created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 1 END) as week_uploads, COUNT(CASE WHEN created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1 END) as month_uploads, SUM(view_count) as total_views FROM files WHERE user_id = ? AND deleted_at IS NULL");
+		$stats = $this->db->prepare("
+			SELECT COUNT(*) as total_files, 
+			SUM(file_size) as total_size, 
+			COUNT(CASE WHEN is_public = 1 THEN 1 END) as public_files, 
+			COUNT(CASE WHEN DATE(created_at) = CURDATE() THEN 1 END) as today_uploads, 
+			COUNT(CASE WHEN created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 1 END) as week_uploads, 
+			COUNT(CASE WHEN created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN 1 END) as month_uploads, 
+			SUM(view_count) as total_views 
+			FROM files 
+			WHERE user_id = ? AND deleted_at IS NULL
+			");
 		$stats -> execute([$userId]);
 		return $stats -> fetch(PDO::FETCH_ASSOC);
 	}
@@ -115,7 +126,11 @@ class FileManager {
 		}
 
 		$updateFileMetadata = $this->db->prepare("UPDATE files SET " . implode(', ', array_map(fn($k) => "$k = :$k", array_keys($cleanUpdates))) . ", updated_at = UTC_TIMESTAMP() WHERE id = :id AND user_id = :user_id AND deleted_at IS NULL");
-		$result = $updateFileMetadata -> execute([...$cleanUpdates, 'id' => $fileId, 'user_id' => $userId]);
+		$result = $updateFileMetadata -> execute([
+			...$cleanUpdates, 
+			'id' => $fileId, 
+			'user_id' => $userId
+		]);
 
 		if ($result) {
 			$this->logActivity($userId, 'metadata_update', $fileId);
@@ -136,7 +151,7 @@ class FileManager {
 		$file = $getFile -> fetch(PDO::FETCH_ASSOC);
 
 		if (!$file) {
-			throw new Exception('Dosya bulunamadı');
+			throw new Exception('Dosya artık bulunmuyor veya süresi dolmuş.');
 		}
 
 		$previewableTypes = [
@@ -153,7 +168,7 @@ class FileManager {
 
 		$filePath = $this->config['paths']['upload_dir'] . $file['file_path'];
 		if (!file_exists($filePath)) {
-			throw new Exception('Dosya bulunamadı');
+			throw new Exception('Dosya artık bulunmuyor veya süresi dolmuş.');
 		}
 
 		if (!$this->security->validateFileHash($filePath, $file['file_hash'])) {
@@ -181,18 +196,18 @@ class FileManager {
 
 		try {
 			$getFile = $this->db->prepare("SELECT file_path FROM files WHERE id = ? AND user_id = ? AND deleted_at IS NULL");
-			$getFile->execute([$fileId, $userId]);
-			$file = $getFile->fetch(PDO::FETCH_ASSOC);
+			$getFile -> execute([$fileId, $userId]);
+			$file = $getFile -> fetch(PDO::FETCH_ASSOC);
 
 			if (!$file) {
-				throw new Exception('Dosya bulunamadı');
+				throw new Exception('Dosya bulunamadı.');
 			}
 
 			$deleteFile = $this->db->prepare("UPDATE files SET deleted_at = UTC_TIMESTAMP() WHERE id = ? AND user_id = ?");
 			$deleteFile -> execute([$fileId, $userId]);
 
 			$this->db->commit();
-			$this->logActivity($userId, 'delete', $fileId);
+			$this -> logActivity($userId, 'delete', $fileId);
 
 			return true;
 
@@ -212,7 +227,7 @@ class FileManager {
 		}
 
 		if ($file['size'] == 0) {
-			throw new Exception('Dosya boş olamaz');
+			throw new Exception('Boş dosya yüklenemez.');
 		}
 
 		$mime = mime_content_type($file['tmp_name']);
@@ -251,9 +266,9 @@ class FileManager {
 	}
 
 	private function saveToDatabase($metadata, $filePath, $userId) {
-		$stmt = $this->db->prepare("INSERT INTO files (user_id, original_name, file_path, file_size, mime_type, file_hash, share_token, expires_at, is_public, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP())");
+		$saveToDatabaseSql = $this->db->prepare("INSERT INTO files (user_id, original_name, file_path, file_size, mime_type, file_hash, share_token, expires_at, is_public, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP())");
 
-		$stmt->execute([
+		$saveToDatabaseSql -> execute([
 			$userId,
 			$metadata['original_name'],
 			$filePath,

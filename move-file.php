@@ -16,12 +16,9 @@ try {
 	}
 
 	$folderManager = new FolderManager($db, $_SESSION['user']['id']);
+	$result = $folderManager -> moveFile($input['file_id'], $input['folder_id'] ?? null);
 
-	$result = $folderManager->moveFile(
-		$input['file_id'],
-		$input['folder_id'] ?? null
-	);
-
+	Logger::info("DOSYA_TASINDI: " . $input['file_id'] . " - " . $input['folder_id'] ?? null)
 	echo json_encode([
 		'status' => 'success',
 		'message' => 'Dosya başarıyla taşındı!'
@@ -29,8 +26,9 @@ try {
 
 } catch (Exception $e) {
 	http_response_code(400);
+	Logger::error("[MOVE-FILE.PHP-38]-DOSYA_TASIMA_HATASI: " . $e -> getMessage());
 	echo json_encode([
 		'status' => 'error',
-		'message' => $e->getMessage()
+		'message' => 'Dosya taşınırken bir hata oluştu: ' . $e -> getMessage()
 	]);
 }

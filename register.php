@@ -19,7 +19,7 @@ try {
 			throw new Exception('Güvenlik doğrulaması başarısız!');
 		}
 
-		$userId = $auth->register(['username' => trim($_POST['username'] ?? ''), 'email' => trim($_POST['email'] ?? ''), 'password' => $_POST['password'] ?? '', 'confirmPassword' => $_POST['confirmPassword'] ?? '', 'termsCheck' => $_POST['termsCheck'] ?? '']);
+		$userId = $auth -> register(['username' => trim($_POST['username'] ?? ''), 'email' => trim($_POST['email'] ?? ''), 'password' => $_POST['password'] ?? '', 'confirmPassword' => $_POST['confirmPassword'] ?? '', 'termsCheck' => $_POST['termsCheck'] ?? '']);
 		$auth -> login(trim($_POST['email']), $_POST['password'], false);
 
 		header("Location: " . $site_url . "home");

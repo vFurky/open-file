@@ -21,15 +21,14 @@ class FileDownloader {
 		$fetchFileInfo = $this->db->prepare("SELECT f.*, u.username FROM files f JOIN users u ON f.user_id = u.id WHERE f.share_token = ? AND (f.expires_at > UTC_TIMESTAMP() OR f.expires_at IS NULL)");
 
 		if (!$fetchFileInfo) {
-			Logger::error("SQL_SORGU_HAZIRLAMA_HATASI");
-			throw new Exception('SQL hazırlama hatası');
+			Logger::error("[FILEDOWNLOADER.PHP-24]-SQL_SORGU_HAZIRLAMA_HATASI");
+			throw new Exception('Bir hata oluştu, lütfen daha sonra tekrar deneyin.');
 		}
 
 		$fetchFileInfo -> execute([$token]);
 		$file = $fetchFileInfo -> fetch(PDO::FETCH_ASSOC);
 
 		if (!$file) {
-			Logger::error("DOSYA_BULUNAMADI_VEYA_SURESI_DOLMUS");
 			header('HTTP/1.0 404 Not Found');
 			exit('Dosya artık bulunmuyor veya süresi dolmuş.');
 		}
@@ -41,7 +40,6 @@ class FileDownloader {
 		$filePath = $_SERVER['DOCUMENT_ROOT'] . '/' . $file['file_path'];
 
 		if (!file_exists($filePath)) {
-			Logger::error("DOSYA_KONUMDA_BULUNAMADI: " . $filePath);
 			header('HTTP/1.0 404 Not Found');
 			exit('Dosya artık bulunmuyor veya süresi dolmuş.');
 		}
